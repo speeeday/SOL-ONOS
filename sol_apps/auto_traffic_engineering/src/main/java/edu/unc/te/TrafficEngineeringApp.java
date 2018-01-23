@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.unc.sc;
+package edu.unc.te;
 // SOL imports
 import edu.unc.sol.app.*;
 import edu.unc.sol.service.SolService;
@@ -42,7 +42,7 @@ import java.lang.Integer;
 import static edu.unc.sol.app.Constraint.*;
 
 @Component(immediate = true)
-public class ServiceChainingApp {
+public class TrafficEngineeringApp {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
@@ -65,7 +65,7 @@ public class ServiceChainingApp {
         deviceService.getAvailableDevices().forEach(devices::add);
 
 	// random number generator for volumes
-	Random rand;
+	Random rand = new Random();
 	
 	int prefix = 167772161; // 10.0.0.1
 	List<TrafficClass> result = new ArrayList<>();
@@ -164,24 +164,22 @@ public class ServiceChainingApp {
     @Activate
     protected void activate() {
 	// register the application with the core service
-        appid = core.registerApplication("SCApp");
+        appid = core.registerApplication("TEApp2");
         HashMap<Resource, Double> costs = new HashMap<>();
         costs.put(Resource.BANDWIDTH, 1.0);
-	ArrayList<Integer> middleboxes = new ArrayList<Integer>();
-	// index the node num that is a middlebox from 0
-	middleboxes.add(new Integer(1));
 	// register the application with SOL
         sol.registerApp(appid, makeRandomTrafficClasses(),
                 new Optimization(getConstraints(), getObjective(), costs),
-			paths -> paths.forEach(p -> intentService.submit(p)), "has_mbox", middleboxes);
-        log.info("SC app started");
+			paths -> paths.forEach(p -> intentService.submit(p)), "null_predicate", null);
+        log.info("TE app started");
     }
 
     @Deactivate
     protected void deactivate() {
 	// unregister the application with SOL
         sol.unregisterApp(appid);
-        log.info("SC app stopped");
+        log.info("TE app stopped");
     }
 
 }
+

@@ -156,7 +156,7 @@ public final class SolServiceImpl implements SolService {
                     log.debug("Woken up going to recompute!!!");
                     if (running) {
                         recompute();
-			log.info("Just recomputed Intents at " + String.valueOf(System.currentTimeMillis() - global_start_time) + "ms");
+			//			log.info("Just recomputed Intents at " + String.valueOf(System.currentTimeMillis() - global_start_time) + "ms");
                         appsChanged = false;
                     } else {
                         break;
